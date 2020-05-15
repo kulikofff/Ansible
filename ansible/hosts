@@ -44,6 +44,8 @@
 
 [staging_servers]
 Centos01 ansible_host=192.168.5.3
+Google   ansible_host=8.8.8.8
+
 #ansible_user=andrey
 
 #[staging_routers]
