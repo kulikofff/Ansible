@@ -1,0 +1,59 @@
+---
+- name: Test connection
+  hosts: staging_servers 
+  become: yes
+
+  tasks:
+
+  - name: Ping my servers
+    ping:
+
+  - block: # for RedHat
+
+      - name: Say Hello to All
+        debug: msg"Hello {{ item }}"
+        loop:
+         - "Item1"
+         - "Item2"     
+
+      - name: Loop Until End 
+        shell: echo -n Z >> Test.txt && cat Test.txt
+        register: output
+        delay: 2
+        retries: 10
+        until: output.stdout.find("ZZZZ") == false 
+
+      - name: Print Final output
+        debug:
+          var: output.stdout  
+
+
+      - name: get IP
+        debug: msg={{ansible_default_ipv4}}
+
+      - name: get OS
+        debug: msg={{ansible_os_family}}
+
+      - name: uptime
+        shell: uptime
+        register: results
+
+      - name: debug
+        debug:
+          var: results.stdout
+
+#      - name: Install Apache for Redhat
+#        yum:  name=httpd state=latest
+
+      - name: Install many packages
+        yum: name {{ item }} state=installed
+        loop:
+         - python
+         - tree
+ 
+
+#      - name: Start Apache
+#        service: name=httpd state=started enabled=yes
+    
+    when: ansible_os_family == "RedHat"
+

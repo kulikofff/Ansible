@@ -1,0 +1,5 @@
+---
+# vars file for deploy_apache_web
+
+  vars:
+    local_host: /usr/home/andrey
